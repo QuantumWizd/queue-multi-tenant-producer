@@ -1,7 +1,8 @@
 package rabbitmq
 
 import (
-	"github.com/streadway/amqp"
+	  amqp "github.com/rabbitmq/amqp091-go"
+
 )
 
 const (
@@ -9,20 +10,17 @@ const (
 )
 
 func DeclareTenantQueue(merchantId string) (amqp.Queue, error) {
+	
 	queueName := QueuePrefix + merchantId
 	args := amqp.Table{
 		// Optional TTL to auto-delete inactive queues
 		"x-expires": int32(20 * 60 * 1000), // 20 mins TTL after unused
 	}
 
-	return Channel.QueueDeclare(
-		queueName,
-		true,  // durable
-		false, // delete when unused (we control deletion)
-		false, // not exclusive
-		false, // no-wait
-		args,
-	)
+	return Channel.QueueDeclare(queueName,true, false,false, false,args)
+
+
+
 }
 
 func DeleteTenantQueue(merchantId string) error {

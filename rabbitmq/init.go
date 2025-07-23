@@ -3,7 +3,8 @@ package rabbitmq
 import (
 	"log"
 
-	"github.com/streadway/amqp"
+	  amqp "github.com/rabbitmq/amqp091-go"
+
 )
 
 var (
@@ -33,6 +34,7 @@ func InitRabbitMQ() error {
 		log.Fatalf("Failed to open a channel: %s", err)
 		return err
 	}
+
 
 	log.Println("RabbitMQ connection and channel established successfully")
 	return nil
