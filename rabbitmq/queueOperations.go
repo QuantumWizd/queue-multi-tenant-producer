@@ -1,25 +1,24 @@
 package rabbitmq
 
 import (
-	  amqp "github.com/rabbitmq/amqp091-go"
+	"context"
 
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 const (
 	QueuePrefix = "idfcBankQueue_"
 )
 
-func DeclareTenantQueue(merchantId string) (amqp.Queue, error) {
-	
+func DeclareTenantQueue(context context.Context, merchantId string) (amqp.Queue, error) {
+
 	queueName := QueuePrefix + merchantId
 	args := amqp.Table{
 		// Optional TTL to auto-delete inactive queues
-		"x-expires": int32(20 * 60 * 1000), // 20 mins TTL after unused
+		"x-expires": int32(20 * 1000), // 20 secs TTL after unused
 	}
 
-	return Channel.QueueDeclare(queueName,true, false,false, false,args)
-
-
+	return Channel.QueueDeclare(queueName, true, false, false, false, args)
 
 }
 
@@ -33,3 +32,18 @@ func DeleteTenantQueue(merchantId string) error {
 	)
 	return err
 }
+
+func PublishToTenantQueue(ctx context.Context, queueName string, body []byte) error {
+	return Channel.PublishWithContext(
+		ctx,
+		"",
+		queueName,
+		false, // mandatory
+		false, // immediate
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        body,
+		},
+	)
+}
+
