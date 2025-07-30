@@ -27,7 +27,7 @@ func SamplePostRequest(context *gin.Context) {
 	// 	context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process request", "details": err.Error()})
 	// 	return
 	// }
-	
+
 	// Declare queue before publishing
 	queue, err := rabbitmq.DeclareTenantQueue(context, request.UserId)
 	if err != nil {
@@ -36,7 +36,7 @@ func SamplePostRequest(context *gin.Context) {
 		return
 	}
 
-	err = rabbitmq.PublishToTenantQueue(context.Request.Context(), queue.Name, request.Data)
+	err = rabbitmq.PublishToTenantQueue(context.Request.Context(), queue.Name, []byte("Hello Queue"))
 	if err != nil {
 		log.Println("Publish failed:", err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to publish message"})

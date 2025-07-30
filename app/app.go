@@ -3,6 +3,7 @@ package app
 import (
 	"log"
 
+	redis "github.com/QuantumWizd/queue-multi-tenant-producer"
 	"github.com/QuantumWizd/queue-multi-tenant-producer/rabbitmq"
 	"github.com/QuantumWizd/queue-multi-tenant-producer/server"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func StartApp() {
 
 	rabbitmq.InitRabbitMQ()
 	server.StartQueueCleanup()
+	redis.InitRedis()
 
 	router := gin.Default()
 	router.GET("/health", func(c *gin.Context) {
