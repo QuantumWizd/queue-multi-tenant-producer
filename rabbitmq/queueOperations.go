@@ -71,12 +71,5 @@ func PublishToTenantQueue(ctx context.Context, queueName string, body []byte) er
 		return err
 	}
 
-	// Reset idle time on publish
-	idleKey := "idle_since:" + queueName
-	now := time.Now().Format(time.RFC3339)
-	if err := redis.Redis.Set(ctx, idleKey, now, 0).Err(); err != nil {
-		log.Printf("Failed to reset idle time after publish for queue %s: %v", queueName, err)
-	}
-
 	return nil
 }
