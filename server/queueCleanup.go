@@ -42,7 +42,7 @@ func StartQueueCleanup() {
 
 func cleanupIdleQueues(context context.Context) {
 
-	queues, err := getAllQueues()
+	queues, err := getAllQueues() //
 	if err != nil {
 		log.Printf("Failed to fetch queues: %v", err)
 		return

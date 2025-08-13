@@ -29,7 +29,7 @@ func SamplePostRequest(context *gin.Context) {
 	// }
 
 	// Declare queue before publishing
-	queue, err := rabbitmq.DeclareTenantQueue(context, request.UserId)
+	queue, err := rabbitmq.DeclareTenantQueue(context, request.UserId, request.BankPipelineCode)
 	if err != nil {
 		log.Printf("Failed to declare queue: %v", err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to initialize message queue", "details": err.Error()})
